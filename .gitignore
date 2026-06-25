@@ -1,0 +1,25 @@
+﻿# Virtual environments
+venv/
+venv311/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Environment variables
+.env
+
+# Build outputs
+dashboard/node_modules/
+dashboard/dist/
+
+# Data / index files
+data/
+
+# Git
+.git/
