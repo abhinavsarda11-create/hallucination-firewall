@@ -1,4 +1,4 @@
-﻿export default function ClaimInspector({ response }) {
+export default function ClaimInspector({ response }) {
   if (!response) return (
     <div className="inspector">
       <div className="inspector-empty">

@@ -1,4 +1,4 @@
-﻿export default function ResponseLog({ responses, selected, onSelect }) {
+export default function ResponseLog({ responses, selected, onSelect }) {
   return (
     <div>
       <div className="log-header">

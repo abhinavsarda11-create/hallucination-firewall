@@ -1,4 +1,4 @@
-﻿import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const FEATURES = [
   { icon: "🔍", title: "Claim extraction", desc: "Groq pulls every verifiable factual claim from LLM responses automatically." },

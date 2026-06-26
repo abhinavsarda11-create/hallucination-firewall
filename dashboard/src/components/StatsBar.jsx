@@ -1,4 +1,4 @@
-﻿export default function StatsBar({ stats }) {
+export default function StatsBar({ stats }) {
   const cards = [
     { label: "Total intercepted", value: stats.total,   color: "#7c6af7" },
     { label: "Flagged (≥40)",     value: stats.flagged,  color: "#f5a623" },

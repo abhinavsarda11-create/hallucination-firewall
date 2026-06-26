@@ -1,4 +1,4 @@
-﻿const HOW_IT_WORKS = [
+const HOW_IT_WORKS = [
   { step: "01", icon: "📥", title: "Request intercepted", desc: "Instead of calling Groq directly, your app sends requests to the Hallucination Firewall proxy running at localhost:8080. The proxy forwards them to Groq on your behalf." },
   { step: "02", icon: "🤖", title: "Groq responds", desc: "Groq processes the request using the llama-3.3-70b-versatile model and sends back a raw response. The proxy catches this before it reaches your app." },
   { step: "03", icon: "🔍", title: "Claims extracted", desc: "A second Groq call reads the response and pulls out every verifiable factual statement — things like dates, names, scientific facts, or historical events." },

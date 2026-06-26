@@ -1,4 +1,4 @@
-﻿*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --bg:#0d0f14;--surface:#13161e;--surface2:#1a1e2a;
   --border:#252a38;--border2:#2e3447;

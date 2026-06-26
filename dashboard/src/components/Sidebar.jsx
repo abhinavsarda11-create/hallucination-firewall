@@ -1,4 +1,4 @@
-﻿import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const NAV = [
   { to: "/",        icon: "⊞", label: "Home" },
