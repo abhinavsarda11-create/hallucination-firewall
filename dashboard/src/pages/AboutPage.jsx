@@ -1,4 +1,4 @@
-const TEAM = [
+﻿const TEAM = [
   { name: "Claim Extractor", role: "Groq · llama-3.3-70b-versatile", desc: "Reads every LLM response and extracts all verifiable factual claims as structured JSON." },
   { name: "FAISS Verifier", role: "Vector similarity search", desc: "Converts claims to embeddings and compares them against your knowledge index using cosine similarity." },
   { name: "Risk Scorer", role: "0–100 confidence engine", desc: "Aggregates verification scores into a single hallucination risk score per response." },
