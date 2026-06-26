@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const API = "http://localhost:8080";
+const API = import.meta.env.VITE_API_URL || "https://hallucination-firewall-production.up.railway.app";
 const MODEL = "llama-3.3-70b-versatile";
 
 function riskColor(s) {
@@ -117,7 +117,7 @@ export default function ChatPage({ connected, onNewResponse }) {
       <div className="chat-messages">
         {messages.map((m, i) => (
           <div key={i} className={`msg-row ${m.role}`}>
-            <div className="msg-avatar">{m.role === "user" ? "U" : "🛡"}</div>
+            <div className="msg-avatar">{m.role === "user" ? "U" : "Ã°Å¸â€ºÂ¡"}</div>
             <div className="msg-body">
               <div className="msg-bubble">{m.content}</div>
 
@@ -128,16 +128,16 @@ export default function ChatPage({ connected, onNewResponse }) {
                     style={{ color: riskColor(m.firewall.risk_score), borderColor: riskColor(m.firewall.risk_score) }}
                     onClick={() => setExpanded(expanded === i ? null : i)}
                   >
-                    Risk {Math.round(m.firewall.risk_score)}/100 · {m.firewall.action_taken}
-                    {m.firewall.flagged_claims?.length > 0 && ` · ${m.firewall.flagged_claims.length} flagged`}
-                    {m.firewall.rewritten && " · ↻ rewritten"}
-                    <span style={{ marginLeft: 4 }}>{expanded === i ? "▲" : "▼"}</span>
+                    Risk {Math.round(m.firewall.risk_score)}/100 Ã‚Â· {m.firewall.action_taken}
+                    {m.firewall.flagged_claims?.length > 0 && ` Ã‚Â· ${m.firewall.flagged_claims.length} flagged`}
+                    {m.firewall.rewritten && " Ã‚Â· Ã¢â€ Â» rewritten"}
+                    <span style={{ marginLeft: 4 }}>{expanded === i ? "Ã¢â€“Â²" : "Ã¢â€“Â¼"}</span>
                   </button>
 
                   {expanded === i && (
                     <div className="inline-inspector">
                       {m.firewall.flagged_claims?.length === 0 ? (
-                        <div className="no-claims-inline">✓ All claims verified — no issues found</div>
+                        <div className="no-claims-inline">Ã¢Å“â€œ All claims verified Ã¢â‚¬â€ no issues found</div>
                       ) : (
                         m.firewall.flagged_claims.map((c, j) => (
                           <div key={j} className="inline-claim">
@@ -147,10 +147,10 @@ export default function ChatPage({ connected, onNewResponse }) {
                         ))
                       )}
                       {m.firewall.rewritten && (
-                        <div className="rewrite-note">↻ Response was auto-corrected by Groq</div>
+                        <div className="rewrite-note">Ã¢â€ Â» Response was auto-corrected by Groq</div>
                       )}
                       <button className="view-audit-btn" onClick={() => navigate("/audit")}>
-                        View in Audit Log →
+                        View in Audit Log Ã¢â€ â€™
                       </button>
                     </div>
                   )}
@@ -162,7 +162,7 @@ export default function ChatPage({ connected, onNewResponse }) {
 
         {loading && (
           <div className="msg-row assistant">
-            <div className="msg-avatar">🛡</div>
+            <div className="msg-avatar">Ã°Å¸â€ºÂ¡</div>
             <div className="msg-body">
               <div className="msg-bubble typing"><span /><span /><span /></div>
             </div>
@@ -174,23 +174,23 @@ export default function ChatPage({ connected, onNewResponse }) {
       <div className="chat-input-bar">
         {!connected && (
           <div className="offline-banner">
-            Demo mode — start the proxy server for real Groq responses
+            Demo mode Ã¢â‚¬â€ start the proxy server for real Groq responses
           </div>
         )}
         <div className="chat-input-row">
           <textarea
             className="chat-textarea"
-            placeholder="Ask anything — your response will be hallucination-checked..."
+            placeholder="Ask anything Ã¢â‚¬â€ your response will be hallucination-checked..."
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={onKey}
             rows={1}
           />
           <button className="send-btn" onClick={send} disabled={loading || !input.trim()}>
-            {loading ? <span className="spin">↻</span> : "↑"}
+            {loading ? <span className="spin">Ã¢â€ Â»</span> : "Ã¢â€ â€˜"}
           </button>
         </div>
-        <div className="input-hint">Enter to send · Shift+Enter for new line · All responses are hallucination-checked</div>
+        <div className="input-hint">Enter to send Ã‚Â· Shift+Enter for new line Ã‚Â· All responses are hallucination-checked</div>
       </div>
     </div>
   );
@@ -201,9 +201,9 @@ function getDemoResponse(q) {
   if (ql.includes("einstein") || ql.includes("telephone")) {
     return {
       original: "Einstein invented the telephone in 1876 and also discovered gravity.",
-      content: "[BLOCKED] Response blocked by Hallucination Firewall (risk: 82/100) — contains unverifiable claims.",
+      content: "[BLOCKED] Response blocked by Hallucination Firewall (risk: 82/100) Ã¢â‚¬â€ contains unverifiable claims.",
       firewall: { risk_score: 82, action_taken: "BLOCK", rewritten: false, flagged_claims: [
-        { text: "Einstein invented the telephone in 1876", reason: "No evidence — telephone invented by Bell", risk_score: 91 },
+        { text: "Einstein invented the telephone in 1876", reason: "No evidence Ã¢â‚¬â€ telephone invented by Bell", risk_score: 91 },
         { text: "Einstein discovered gravity", reason: "Gravity was described by Newton, not Einstein", risk_score: 78 },
       ]},
     };
@@ -213,7 +213,7 @@ function getDemoResponse(q) {
       original: "Apollo 11 landed on Mars in 1969, piloted by Neil Armstrong.",
       content: "Apollo 11 landed on the Moon in 1969. Neil Armstrong was the mission commander.",
       firewall: { risk_score: 74, action_taken: "REWRITE", rewritten: true, flagged_claims: [
-        { text: "Apollo 11 landed on Mars", reason: "No evidence — Apollo 11 landed on the Moon", risk_score: 95 },
+        { text: "Apollo 11 landed on Mars", reason: "No evidence Ã¢â‚¬â€ Apollo 11 landed on the Moon", risk_score: 95 },
       ]},
     };
   }
@@ -222,7 +222,7 @@ function getDemoResponse(q) {
       original: "Python was created by Guido van Rossum and released in 1992.",
       content: "Python was created by Guido van Rossum and first released in 1991.",
       firewall: { risk_score: 55, action_taken: "WARN", rewritten: false, flagged_claims: [
-        { text: "Python was released in 1992", reason: "Partial evidence — actual release was 1991", risk_score: 55 },
+        { text: "Python was released in 1992", reason: "Partial evidence Ã¢â‚¬â€ actual release was 1991", risk_score: 55 },
       ]},
     };
   }

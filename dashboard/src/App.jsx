@@ -48,7 +48,8 @@ export default function App() {
   useEffect(() => {
     const poll = setInterval(async () => {
       try {
-        const r = await fetch("http://localhost:8080/health");
+        const HEALTH_URL = import.meta.env.VITE_API_URL || "https://hallucination-firewall-production.up.railway.app";
+        const r = await fetch(`${HEALTH_URL}/health`);
         setConnected(r.ok);
       } catch { setConnected(false); }
     }, 4000);
