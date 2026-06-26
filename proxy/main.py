@@ -1,4 +1,4 @@
-"""
+﻿"""
 Hallucination Firewall — proxy server entry point.
 Run: uvicorn proxy.main:app --reload --port 8080
 """
