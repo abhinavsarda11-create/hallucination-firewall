@@ -1,15 +1,15 @@
-from fastapi import APIRouter, Request
-from fastapi.responses import JSONResponse
+﻿import os
+from pathlib import Path
+from fastapi import APIRouter
 
 router = APIRouter()
 
-
 @router.get("/health")
-async def health(request: Request):
-    verifier = getattr(request.app.state, "verifier", None)
-    index_ready = verifier._ready if verifier else False
-    return JSONResponse({
+async def health():
+    return {
         "status": "ok",
-        "index_ready": index_ready,
-        "index_size": verifier.index.ntotal if index_ready and verifier.index else 0,
-    })
+        "groq_key_set": bool(os.getenv("GROQ_API_KEY")),
+        "groq_key_prefix": os.getenv("GROQ_API_KEY", "")[:8] + "..." if os.getenv("GROQ_API_KEY") else "NOT SET",
+        "index_exists": Path("./data/index.faiss").exists(),
+        "index_path": str(Path("./data/index.faiss").absolute()),
+    }
