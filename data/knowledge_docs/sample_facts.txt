@@ -1,9 +1,10 @@
-The Eiffel Tower was constructed between 1887 and 1889 as the centerpiece of the 1889 World's Fair in Paris.
-It was designed by engineer Gustave Eiffel and stands 330 meters tall.
+﻿The Eiffel Tower is located in Paris, France and was built in 1889.
 The Eiffel Tower receives approximately 7 million visitors per year.
+The Eiffel Tower was designed by Gustave Eiffel.
 
 The Python programming language was created by Guido van Rossum and first released in 1991.
 Python 3.0 was released in 2008 and is not fully backward compatible with Python 2.
+Python is widely used for web development, data science, and artificial intelligence.
 
 The Apollo 11 mission landed humans on the Moon on July 20, 1969.
 Neil Armstrong was the first human to walk on the Moon, followed by Buzz Aldrin.
@@ -11,6 +12,23 @@ Michael Collins remained in orbit in the command module Columbia.
 
 Albert Einstein published the special theory of relativity in 1905 and the general theory in 1915.
 Einstein was awarded the Nobel Prize in Physics in 1921 for his discovery of the law of the photoelectric effect.
+Einstein did not invent the telephone. The telephone was invented by Alexander Graham Bell in 1876.
+Einstein did not discover gravity. Gravity was described by Isaac Newton in 1687.
+
+The telephone was invented by Alexander Graham Bell in 1876.
+Alexander Graham Bell filed the first patent for a telephone on March 7, 1876.
 
 The World Wide Web was invented by Tim Berners-Lee in 1989 while working at CERN.
 The first website went live on August 6, 1991.
+
+Isaac Newton described the law of universal gravitation in 1687.
+Newton formulated the three laws of motion.
+
+The Great Wall of China was built over many centuries, with major construction during the Ming dynasty.
+The Great Wall of China is approximately 13,170 miles long.
+
+Water boils at 100 degrees Celsius or 212 degrees Fahrenheit at standard atmospheric pressure.
+Water freezes at 0 degrees Celsius or 32 degrees Fahrenheit.
+
+The human body has 206 bones in adulthood.
+The heart pumps blood through the circulatory system.
