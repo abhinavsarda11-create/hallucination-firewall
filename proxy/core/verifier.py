@@ -1,94 +1,84 @@
-"""
+﻿"""
 Verifier.
-Embeds each claim using sentence-transformers and checks cosine similarity
-against a FAISS index built from your knowledge documents.
-Returns a verification score per claim (0.0 = no evidence, 1.0 = strong match).
+Checks claims against a FAISS index if available.
+Falls back gracefully if faiss/sentence-transformers not installed.
 """
 import os
 import logging
-import numpy as np
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
 FAISS_INDEX_PATH = os.getenv("FAISS_INDEX_PATH", "./data/index.faiss")
-DOCS_META_PATH = os.getenv("FAISS_INDEX_PATH", "./data/index.faiss").replace(".faiss", "_meta.json")
+DOCS_META_PATH   = FAISS_INDEX_PATH.replace(".faiss", "_meta.json")
+NO_INDEX_SCORE   = 35.0
 
 
 class VerificationResult:
     def __init__(self, claim: str, score: float, best_match: str, match_distance: float):
         self.claim = claim
-        self.score = score                  # 0–100, higher = more verified
-        self.best_match = best_match        # The closest document chunk
+        self.score = score
+        self.best_match = best_match
         self.match_distance = match_distance
 
 
 class Verifier:
     def __init__(self):
         self.index = None
-        self.meta = []
+        self.meta  = []
         self.model = None
         self._ready = False
 
     async def load(self):
-        """Load FAISS index and embedding model. Called once at startup."""
         try:
             import faiss
             import json
             from sentence_transformers import SentenceTransformer
 
             if not Path(FAISS_INDEX_PATH).exists():
-                logger.warning(
-                    f"FAISS index not found at {FAISS_INDEX_PATH}. "
-                    "Run: python scripts/build_index.py\n"
-                    "Verifier will return neutral scores (50) until index is built."
-                )
+                logger.warning("FAISS index not found - using uncertain scores.")
                 return
 
             self.index = faiss.read_index(FAISS_INDEX_PATH)
             with open(DOCS_META_PATH) as f:
                 self.meta = json.load(f)
-
             self.model = SentenceTransformer("all-MiniLM-L6-v2")
             self._ready = True
-            logger.info(f"Verifier ready — {self.index.ntotal} indexed chunks.")
+            logger.info(f"Verifier ready - {self.index.ntotal} indexed chunks.")
 
-        except ImportError as e:
-            logger.error(f"Missing dependency: {e}. pip install faiss-cpu sentence-transformers")
+        except ImportError:
+            logger.warning("faiss-cpu or sentence-transformers not installed - using uncertain scores.")
         except Exception as e:
-            logger.error(f"Verifier load error: {e}")
+            logger.warning(f"Verifier load error: {e} - using uncertain scores.")
 
     async def verify(self, claims: list[str]) -> list[VerificationResult]:
-        """Verify each claim against the index. Returns one result per claim."""
-        if not self._ready or not claims:
-            # Return neutral if index not loaded
+        if not claims:
+            return []
+
+        if not self._ready:
+            logger.info(f"Verifier not ready - scoring {len(claims)} claims as uncertain ({NO_INDEX_SCORE})")
             return [
-                VerificationResult(c, score=50.0, best_match="index not loaded", match_distance=1.0)
+                VerificationResult(
+                    claim=c,
+                    score=NO_INDEX_SCORE,
+                    best_match="No knowledge index loaded",
+                    match_distance=0.0,
+                )
                 for c in claims
             ]
 
-        embeddings = self.model.encode(claims, normalize_embeddings=True)
-        embeddings = np.array(embeddings, dtype="float32")
-
-        # k=1: just the best match per claim
-        distances, indices = self.index.search(embeddings, k=1)
-
-        results = []
-        for i, claim in enumerate(claims):
-            dist = float(distances[i][0])   # Inner product (cosine) since normalized
-            idx = int(indices[i][0])
-            best_match = self.meta[idx]["text"] if 0 <= idx < len(self.meta) else "unknown"
-
-            # Convert cosine similarity (0–1) → risk contribution (0–100)
-            # High similarity = evidence found = low risk
-            # Low similarity = no evidence = high risk
-            verification_score = dist * 100   # 0 = no match, 100 = perfect match
-
-            results.append(VerificationResult(
-                claim=claim,
-                score=verification_score,
-                best_match=best_match,
-                match_distance=dist,
-            ))
-
-        return results
+        try:
+            import numpy as np
+            embeddings = self.model.encode(claims, normalize_embeddings=True)
+            embeddings = np.array(embeddings, dtype="float32")
+            distances, indices = self.index.search(embeddings, k=1)
+            results = []
+            for i, claim in enumerate(claims):
+                dist = float(distances[i][0])
+                idx  = int(indices[i][0])
+                best = self.meta[idx]["text"] if 0 <= idx < len(self.meta) else "unknown"
+                results.append(VerificationResult(claim=claim, score=dist * 100, best_match=best, match_distance=dist))
+            return results
+        except Exception as e:
+            logger.error(f"Verification error: {e}")
+            return [VerificationResult(claim=c, score=NO_INDEX_SCORE, best_match="error", match_distance=0.0) for c in claims]
