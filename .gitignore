@@ -19,7 +19,6 @@ dashboard/node_modules/
 dashboard/dist/
 
 # Data / index files
-data/
 
 # Git
 .git/
