@@ -1,75 +1,47 @@
-"""
-Claim extractor.
-Uses Groq (llama-3.3-70b-versatile, fast + cheap) to pull every verifiable
-factual claim from an LLM response as structured JSON.
-"""
-import os
-import json
-import logging
-import httpx
-
+﻿import os, json, logging, httpx, re
 logger = logging.getLogger(__name__)
-
 GROQ_BASE = "https://api.groq.com/openai/v1"
-EXTRACTOR_MODEL = "llama-3.3-70b-versatile"
-
-EXTRACTION_PROMPT = """You are a fact-checking assistant. Given a text, extract every
-verifiable factual claim — statements that could be checked against a reference source.
-
-Return ONLY a JSON array. No preamble, no markdown fences, no explanation.
-Each element: { "claim": "...", "checkable": true/false }
-
-Only include claims where checkable=true (skip opinions, hypotheticals, advice).
-
-Text to analyse:
-{text}"""
-
 
 class ClaimExtractor:
-    def __init__(self):
-        self.api_key = os.getenv("GROQ_API_KEY", "")
-
     async def extract(self, text: str) -> list[str]:
-        """Return a list of checkable factual claims from text."""
+        api_key = os.getenv("GROQ_API_KEY", "").strip()
+        if not api_key or not text.strip():
+            return self._fallback(text)
         try:
-            payload = {
-                "model": EXTRACTOR_MODEL,
-                "messages": [
-                    {
-                        "role": "user",
-                        "content": EXTRACTION_PROMPT.format(text=text)
-                    }
-                ],
-                "temperature": 0.0,
-                "max_tokens": 512,
-            }
+            prompt = f"""List every verifiable fact in this text as a JSON array.
+Format: [{{"claim": "fact here", "checkable": true}}]
+Return ONLY the JSON array, nothing else.
+Text: {text.strip()[:1000]}"""
             async with httpx.AsyncClient(timeout=30) as client:
                 resp = await client.post(
                     f"{GROQ_BASE}/chat/completions",
-                    json=payload,
-                    headers={
-                        "Authorization": f"Bearer {self.api_key}",
-                        "Content-Type": "application/json",
-                    },
+                    json={"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}], "temperature": 0.0, "max_tokens": 512},
+                    headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
                 )
                 resp.raise_for_status()
-
-            data = resp.json()
-            raw = data["choices"][0]["message"]["content"].strip()
-
-            # Strip markdown fences if model adds them
-            raw = raw.replace("```json", "").replace("```", "").strip()
-            claims_data = json.loads(raw)
-
-            return [
-                item["claim"]
-                for item in claims_data
-                if item.get("checkable", False)
-            ]
-
-        except (json.JSONDecodeError, KeyError, IndexError) as e:
-            logger.warning(f"Claim extraction parse error: {e}")
-            return []
+            raw = resp.json()["choices"][0]["message"]["content"].strip()
+            logger.info(f"Extractor raw: {raw[:100]}")
+            # Strip markdown
+            raw = re.sub(r"```json|```", "", raw).strip()
+            # Find JSON array
+            start, end = raw.find("["), raw.rfind("]") + 1
+            if start == -1 or end == 0:
+                logger.warning(f"No JSON array found, using fallback. Raw: {raw[:50]}")
+                return self._fallback(text)
+            data = json.loads(raw[start:end])
+            claims = [i["claim"] for i in data if isinstance(i, dict) and i.get("checkable", False)]
+            logger.info(f"Extracted {len(claims)} claims: {claims}")
+            return claims
+        except json.JSONDecodeError as e:
+            logger.warning(f"JSON parse error: {e} — using fallback")
+            return self._fallback(text)
         except Exception as e:
-            logger.error(f"Claim extraction failed: {e}")
-            return []
+            logger.error(f"Extraction failed: {e}")
+            return self._fallback(text)
+
+    def _fallback(self, text: str) -> list[str]:
+        sentences = re.split(r"(?<=[.!?])\s+", text.strip())
+        skip = ("i ", "you ", "we ", "please ", "if ", "this ", "that ", "it ")
+        claims = [s.strip() for s in sentences if len(s.strip()) > 20 and not s.lower().startswith(skip) and "?" not in s]
+        logger.info(f"Fallback extracted {len(claims)} claims")
+        return claims[:5]
