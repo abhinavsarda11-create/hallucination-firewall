@@ -1,15 +1,22 @@
 ﻿import os
+import logging
 from pathlib import Path
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 @router.get("/health")
-async def health():
+async def health(request: Request):
+    verifier = getattr(request.app.state, "verifier", None)
+    docs_loaded = len(getattr(verifier, "_docs", [])) if verifier else 0
+    index_ready = getattr(verifier, "_ready", False) if verifier else False
+    key = os.getenv("GROQ_API_KEY", "")
     return {
         "status": "ok",
-        "groq_key_set": bool(os.getenv("GROQ_API_KEY")),
-        "groq_key_prefix": os.getenv("GROQ_API_KEY", "")[:8] + "..." if os.getenv("GROQ_API_KEY") else "NOT SET",
-        "index_exists": Path("./data/index.faiss").exists(),
-        "index_path": str(Path("./data/index.faiss").absolute()),
+        "groq_key_set": bool(key),
+        "groq_key_prefix": key[:8] + "..." if key else "NOT SET",
+        "index_ready": index_ready,
+        "docs_loaded": docs_loaded,
+        "docs_path_exists": Path(os.getenv("DOCS_PATH", "./data/knowledge_docs/")).exists(),
     }
