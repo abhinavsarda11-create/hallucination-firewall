@@ -1,6 +1,6 @@
 {
   "name": "hallucination-firewall-dashboard",
-  "version": "2.0.0",
+  "version": "4.0.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -11,7 +11,9 @@
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "react-router-dom": "^6.23.0",
-    "recharts": "^2.12.0"
+    "framer-motion": "^11.2.0",
+    "recharts": "^2.12.0",
+    "lucide-react": "^0.383.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.0",
