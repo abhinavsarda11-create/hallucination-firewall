@@ -49,7 +49,7 @@ async def decide_action(
 
     if action == Action.BLOCK:
         final_answer = (
-            f"[BLOCKED] This response was blocked by the Hallucination Firewall "
+            f"[BLOCKED] This response was blocked by the Veridion "
             f"(risk score: {risk_score:.0f}/100). "
             "The response contained claims that could not be verified."
         )
