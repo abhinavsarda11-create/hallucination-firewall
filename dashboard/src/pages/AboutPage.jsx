@@ -22,7 +22,7 @@ export default function AboutPage() {
         initial={{ opacity:0,y:30 }} animate={{ opacity:1,y:0 }}>
         <motion.div style={{ fontSize:60 }} animate={{ y:[0,-8,0],rotate:[0,5,-5,0] }} transition={{ duration:4,repeat:Infinity }}>🛡</motion.div>
         <motion.h1 style={{ fontSize:30,fontWeight:800,background:"linear-gradient(135deg,#e6edf3,#7c6af7)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent" }}>
-          Hallucination Firewall
+          Veridion
         </motion.h1>
         <p style={{ fontSize:14,color:"#7d8590",maxWidth:560,lineHeight:1.7 }}>
           A drop-in middleware proxy that intercepts every LLM response, verifies factual claims using Groq's world knowledge, and acts in real time — before hallucinations reach your users.
