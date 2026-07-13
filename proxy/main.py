@@ -65,7 +65,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Hallucination Firewall",
+    title="Veridion",
     description="Drop-in LLM proxy with AI-powered hallucination detection.",
     version="2.0.0",
     lifespan=lifespan,
