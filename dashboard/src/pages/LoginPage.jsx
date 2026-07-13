@@ -82,7 +82,7 @@ export default function LoginPage({ onLogin }) {
             <Shield size={30} color="#fff" />
           </motion.div>
           <h1 style={{ fontSize:22,fontWeight:800,background:"linear-gradient(135deg,#e6edf3,#7c6af7)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent" }}>
-            HallucinationFirewall
+            Veridion
           </h1>
           <div style={{ display:"flex",alignItems:"center",gap:6,fontSize:12,color:"#7d8590" }}>
             <Sparkles size={11} /> AI response security powered by Groq
