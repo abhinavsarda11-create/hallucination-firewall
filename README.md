@@ -113,7 +113,7 @@ ARCHITECTURE]
 
 ## 📽️ Demo & Deliverables
 
-- **Demo Video Link (Mandatory):** `[Add link once recorded]`
+- **Demo Video Link (Mandatory):** `https://drive.google.com/file/d/1BPv67MlcTQ6GI3i-W5_67aWD062P7w8V/view?usp=sharing`
 - **Deployment Link:** https://veridion-pro.vercel.app/ ** 
 
 ---
