@@ -25,7 +25,7 @@ export default function Sidebar({ user, onLogout, connected, auditCount, onClose
           <Shield size={17} color="#fff" />
         </motion.div>
         <div style={{ flex:1,minWidth:0 }}>
-          <div style={{ fontSize:13,fontWeight:700,letterSpacing:"-.2px",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis" }}>HallucinationFirewall</div>
+          <div style={{ fontSize:13,fontWeight:700,letterSpacing:"-.2px",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis" }}>Veridion</div>
           <div style={{ fontSize:10,color:"#7d8590",fontFamily:"JetBrains Mono,monospace" }}>v4.0 · Groq Edition</div>
         </div>
         {/* Close button - mobile only */}
