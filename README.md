@@ -114,7 +114,7 @@ ARCHITECTURE]
 ## 📽️ Demo & Deliverables
 
 - **Demo Video Link (Mandatory):** `[Add link once recorded]`
-- **Deployment Link:** https://veridion-pro.vercel.app/ ** · Backend: https://hallucination-firewall-production.up.railway.app/health
+- **Deployment Link:** https://veridion-pro.vercel.app/ ** · Backend: https://hallucination-firewall-production.up.railway.app/docs
 
 ---
 
