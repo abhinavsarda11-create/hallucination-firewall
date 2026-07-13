@@ -123,7 +123,7 @@ export default function ChatPage({ connected, onNewResponse, apiUrl }) {
                 </motion.div>
                 <div className="msg-body">
                   <div style={{ display:"flex",alignItems:"center",gap:7,marginBottom:3 }}>
-                    <span className="msg-name">{m.role==="user"?"You":"HallucinationFirewall"}</span>
+                    <span className="msg-name">{m.role==="user"?"You":"Veridion"}</span>
                     <span className="msg-time">{m.time}</span>
                   </div>
                   <motion.div className="msg-bubble" whileHover={{ borderColor:"#2a3347" }}>{m.content}</motion.div>
@@ -168,7 +168,7 @@ export default function ChatPage({ connected, onNewResponse, apiUrl }) {
           <motion.div className="msg-row assistant" initial={{ opacity:0,y:20 }} animate={{ opacity:1,y:0 }}>
             <div className="msg-avatar"><Shield size={13}/></div>
             <div className="msg-body">
-              <div className="msg-name" style={{ marginBottom:4 }}>HallucinationFirewall</div>
+              <div className="msg-name" style={{ marginBottom:4 }}>Veridion</div>
               <div className="msg-bubble" style={{ display:"flex",alignItems:"center",gap:6 }}>
                 {[0,1,2].map(i=>(
                   <motion.div key={i} style={{ width:6,height:6,borderRadius:"50%",background:"#7d8590" }}
