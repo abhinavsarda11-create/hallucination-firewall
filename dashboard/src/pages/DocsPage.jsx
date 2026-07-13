@@ -25,7 +25,7 @@ export default function DocsPage() {
     <div style={{ padding:"28px 32px",maxWidth:860 }}>
       <motion.div initial={{ opacity:0,y:20 }} animate={{ opacity:1,y:0 }}>
         <h1 style={{ fontSize:24,fontWeight:700,letterSpacing:"-.4px" }}>Documentation</h1>
-        <p style={{ fontSize:14,color:"#7d8590",marginTop:6,lineHeight:1.7,maxWidth:600 }}>Everything you need to understand, configure, and integrate the Hallucination Firewall.</p>
+        <p style={{ fontSize:14,color:"#7d8590",marginTop:6,lineHeight:1.7,maxWidth:600 }}>Everything you need to understand, configure, and integrate the Veridion.</p>
       </motion.div>
 
       {/* Pipeline */}
